@@ -17,15 +17,20 @@ export default function Header() {
 
     useEffect(() => {
         setIsAdmin(!!localStorage.getItem("admin_token"));
-        const onStorage = () =>
+        const onUpdate = () =>
             setIsAdmin(!!localStorage.getItem("admin_token"));
-        window.addEventListener("storage", onStorage);
-        return () => window.removeEventListener("storage", onStorage);
+        window.addEventListener("storage", onUpdate);
+        window.addEventListener("admin-auth-change", onUpdate);
+        return () => {
+            window.removeEventListener("storage", onUpdate);
+            window.removeEventListener("admin-auth-change", onUpdate);
+        };
     }, []);
 
     function handleLogout() {
         adminLogout();
         setIsAdmin(false);
+        window.dispatchEvent(new Event("admin-auth-change"));
         router.push("/");
     }
 

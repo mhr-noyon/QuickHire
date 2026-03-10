@@ -3,7 +3,7 @@ import { Job } from "@/lib/types";
 import {
     Briefcase,
     CheckCircle2,
-    ExternalLink,
+    Info  ,
     Loader2,
     Plus,
     Search,
@@ -457,7 +457,15 @@ export default function JobList({
                                 >
                                     <div className="flex min-w-0 items-center gap-4">
                                         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-[#F0F0F7] text-[16px] font-bold text-[#4640DE]">
-                                            {job.company.charAt(0)}
+                                            {job.logo ? (
+                                                <img
+                                                    src={job.logo}
+                                                    alt={job.company}
+                                                    className="h-full w-full object-cover"
+                                                />
+                                            ) : (
+                                                job.company.charAt(0)
+                                            )}
                                         </div>
                                         <div className="min-w-0">
                                             <h3 className="truncate text-[16px] font-semibold text-[#25324B]">
@@ -476,7 +484,7 @@ export default function JobList({
                                             className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-md text-[#7C8493] transition hover:bg-[#F8F8FD] hover:text-[#4640DE]"
                                             title="View job"
                                         >
-                                            <ExternalLink className="h-4 w-4" />
+                                            <Info   className="h-5 w-5" />
                                         </button>
                                         <button
                                             onClick={() => setDeleteTarget(job)}

@@ -25,6 +25,7 @@ export default function LoginPage() {
         try {
             const { token } = await adminLogin(username, password);
             localStorage.setItem("admin_token", token);
+            window.dispatchEvent(new Event("admin-auth-change"));
             router.push("/admin");
         } catch (err) {
             setError(

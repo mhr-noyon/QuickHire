@@ -51,6 +51,10 @@ export default function AdminPanel() {
     }, []);
 
     useEffect(() => {
+        if (authChecked) loadApplications();
+    }, [authChecked, loadApplications]);
+
+    useEffect(() => {
         if (authChecked && activeTab === "applications") loadApplications();
     }, [authChecked, activeTab, loadApplications]);
 
