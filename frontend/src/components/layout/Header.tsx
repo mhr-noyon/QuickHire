@@ -30,7 +30,7 @@ export default function Header() {
     }
 
     return (
-        <header className="w-full bg-[#F8F8FD] text-[#25324B]">
+        <header className="fixed top-0 left-0 z-50 w-full bg-[#F8F8FD] text-[#25324B]">
             <div className="mx-auto flex h-[72px] max-w-[1400px] items-center justify-between px-6  lg:px-16">
                 <div className="flex items-center gap-10">
                     <Link href="/" className="flex items-center gap-3">
@@ -45,16 +45,15 @@ export default function Header() {
                     </Link>
 
                     <nav className="hidden items-center gap-8 md:flex">
-                        {!isAdmin &&
-                            navLinks.map((item) => (
-                                <Link
-                                    key={item.label}
-                                    href={item.href}
-                                    className="text-[16px] font-medium text-[#515B6F] transition hover:text-[#25324B]"
-                                >
-                                    {item.label}
-                                </Link>
-                            ))}
+                        {!isAdmin && navLinks.map((item) => (
+                            <Link
+                                key={item.label}
+                                href={item.href}
+                                className="text-[16px] font-medium text-[#515B6F] transition hover:text-[#25324B]"
+                            >
+                                {item.label}
+                            </Link>
+                        ))}
                     </nav>
                 </div>
 

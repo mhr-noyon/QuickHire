@@ -168,6 +168,34 @@ QuickHire/
 └── README.md
 ```
 
+---
+
+# Environment Variables
+
+**Backend `.env`**
+
+```env
+PORT=5000
+
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=quickhire
+CONECTION_LIMIT=1
+
+ADMIN_USERNAME=username
+ADMIN_PASSWORD=password
+
+ALLOWED_ORIGINS=http://localhost:3000, http://localhost:5173
+```
+
+**_Frontend `.env`_**
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000
+```
+
 ## API Reference
 
 All responses use a consistent JSON envelope:
@@ -241,10 +269,6 @@ Tables are auto-created on server startup. No manual migrations needed.
 
 - **Auto-setup** — tables and seed data are created on first server start, zero manual SQL needed
 - **Skeleton loading** — animated placeholder cards while jobs are fetching
-- **Debounced search** — 250ms delay on keyword and location inputs for smooth UX
-- **Category count badges** — each filter shows how many jobs match
-- **Sticky apply form** — application form stays visible while scrolling job details
-- **Delete cascade** — deleting a job automatically removes all its applications
 - **Responsive everywhere** — mobile-first design with proper breakpoints for tablet and desktop
 - **Consistent API envelope** — every endpoint returns `{ success, data }` or `{ success, message, errors }`
 - **CORS configuration** — allowed origins controlled via environment variable
