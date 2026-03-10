@@ -17,6 +17,7 @@ const corsOptions = {
     origin: allowedOrigins,
     credentials: true,
 };
+console.log("Allowed CORS origins:", allowedOrigins);
 app.use(cors(corsOptions));
 
 /* ── Database setup ── */
