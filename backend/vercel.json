@@ -10,21 +10,12 @@
         {
             "src": "/api/(.*)",
             "methods": ["OPTIONS"],
-            "headers": [
-                {
-                    "key": "Access-Control-Allow-Origin",
-                    "value": "https://quick-hire-quick.vercel.app"
-                },
-                {
-                    "key": "Access-Control-Allow-Methods",
-                    "value": "GET,POST,PUT,PATCH,DELETE,OPTIONS"
-                },
-                {
-                    "key": "Access-Control-Allow-Headers",
-                    "value": "Content-Type,Authorization"
-                },
-                { "key": "Access-Control-Allow-Credentials", "value": "true" }
-            ],
+            "headers": {
+                "Access-Control-Allow-Origin": "https://quick-hire-quick.vercel.app",
+                "Access-Control-Allow-Methods": "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type,Authorization",
+                "Access-Control-Allow-Credentials": "true"
+            },
             "continue": false
         },
         {
