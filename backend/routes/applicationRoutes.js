@@ -1,8 +1,22 @@
 const express = require("express");
 const router = express.Router();
-const { submitApplication } = require("../controllers/applicationController");
+const {
+    getAllApplications,
+    submitApplication,
+} = require("../controllers/applicationController");
 const { validateApplication } = require("../middleware/validate");
-const { created, badRequest, error } = require("../utils/response");
+const { requireAdmin } = require("../middleware/auth");
+const { success, created, badRequest, error } = require("../utils/response");
+
+/* GET /api/applications — list all (admin only) */
+router.get("/", requireAdmin, async (req, res) => {
+    try {
+        const applications = await getAllApplications();
+        return success(res, applications);
+    } catch (err) {
+        return error(res, "Failed to fetch applications");
+    }
+});
 
 /* POST /api/applications — submit application */
 router.post("/", async (req, res) => {

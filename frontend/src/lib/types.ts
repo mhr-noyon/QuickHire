@@ -18,3 +18,8 @@ export interface Application {
     cover_note: string;
     created_at: string;
 }
+
+export interface ApplicationWithJob extends Application {
+    job_title: string;
+    job_company: string;
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowLeft, MapPin, Briefcase, Calendar } from "lucide-react";
 import { fetchJobById } from "@/lib/api";
 import { Job } from "@/lib/types";
@@ -12,9 +12,17 @@ interface JobDetailProps {
 }
 
 export default function JobDetail({ jobId }: JobDetailProps) {
+    const router = useRouter();
     const [job, setJob] = useState<Job | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [cameFromAdmin, setCameFromAdmin] = useState(false);
+
+    useEffect(() => {
+        if (document.referrer.includes("/admin")) {
+            setCameFromAdmin(true);
+        }
+    }, []);
 
     useEffect(() => {
         fetchJobById(jobId)
@@ -22,6 +30,14 @@ export default function JobDetail({ jobId }: JobDetailProps) {
             .catch(() => setError("Could not load job details."))
             .finally(() => setLoading(false));
     }, [jobId]);
+
+    function handleBack() {
+        if (cameFromAdmin) {
+            router.push("/admin");
+        } else {
+            router.push("/jobs");
+        }
+    }
 
     if (loading) {
         return (
@@ -37,12 +53,13 @@ export default function JobDetail({ jobId }: JobDetailProps) {
                 <p className="text-[18px] text-[#7C8493]">
                     {error || "Job not found."}
                 </p>
-                <Link
-                    href="/jobs"
-                    className="mt-4 inline-flex items-center gap-2 text-[15px] font-semibold text-[#4640DE] hover:underline"
+                <button
+                    onClick={handleBack}
+                    className="mt-4 inline-flex cursor-pointer items-center gap-2 text-[15px] font-semibold text-[#4640DE] hover:underline"
                 >
-                    <ArrowLeft className="h-4 w-4" /> Back to jobs
-                </Link>
+                    <ArrowLeft className="h-4 w-4" />{" "}
+                    {cameFromAdmin ? "Back to admin" : "Back to jobs"}
+                </button>
             </div>
         );
     }
@@ -52,17 +69,26 @@ export default function JobDetail({ jobId }: JobDetailProps) {
             {/* Header band */}
             <div className="bg-[#F8F8FD] py-10 lg:py-14">
                 <div className="mx-auto w-full max-w-[1400px] px-6 lg:px-16">
-                    <Link
-                        href="/jobs"
-                        className="inline-flex items-center gap-2 text-[15px] font-medium text-[#4640DE] hover:underline"
+                    <button
+                        onClick={handleBack}
+                        className="inline-flex cursor-pointer items-center gap-2 text-[15px] font-medium text-[#4640DE] hover:underline"
                     >
-                        <ArrowLeft className="h-4 w-4" /> Back to jobs
-                    </Link>
+                        <ArrowLeft className="h-4 w-4" />{" "}
+                        {cameFromAdmin ? "Back to admin" : "Back to jobs"}
+                    </button>
 
                     <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-center gap-5">
                             <div className="flex h-16 w-16 items-center justify-center rounded-md bg-white text-[24px] font-bold text-[#4640DE] shadow-sm">
-                                {job.company.charAt(0)}
+                                {job.logo ? (
+                                    <img
+                                        src={job.logo}
+                                        alt={`${job.company} logo`}
+                                        className="h-full w-full object-contain"
+                                    />
+                                ) : (
+                                    job.company.charAt(0)
+                                )}
                             </div>
                             <div>
                                 <h1 className="text-[28px] font-semibold text-[#25324B] md:text-[34px]">

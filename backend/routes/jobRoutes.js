@@ -9,6 +9,7 @@ const {
     getFeaturedJobs,
 } = require("../controllers/jobController");
 const { validateJob } = require("../middleware/validate");
+const { requireAdmin } = require("../middleware/auth");
 const {
     success,
     created,
@@ -65,10 +66,8 @@ router.get("/count/:category", async (req, res) => {
     }
 });
 
-
-
 /* POST /api/jobs — create job (admin) */
-router.post("/", async (req, res) => {
+router.post("/", requireAdmin, async (req, res) => {
     const { valid, errors: validationErrors } = validateJob(req.body);
     if (!valid) return badRequest(res, "Validation failed", validationErrors);
 
@@ -81,7 +80,7 @@ router.post("/", async (req, res) => {
 });
 
 /* DELETE /api/jobs/:id — delete job (admin) */
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requireAdmin, async (req, res) => {
     const { id } = req.params;
     try {
         const result = await deleteJob(id);

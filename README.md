@@ -1,98 +1,16 @@
-# QuickHire — Simple Job Board Application
+# QuickHire
 
-A full-stack mini job board built with **Next.js 16** (App Router) and **Express 5** + **MySQL**. Users can browse jobs, filter/search, view details, and apply. Admins can create and delete job listings.
+A full-stack job board application where users can **browse**, **search**, **filter**, and **apply to jobs** — while admins manage listings through a protected dashboard.
 
----
+Built with **Next.js 16** + **TypeScript** on the frontend and **Express 5** + **MySQL** on the backend.
 
-## Tech Stack
-
-| Layer    | Technology                                    |
-| -------- | --------------------------------------------- |
-| Frontend | Next.js 16 (App Router), React 19, TypeScript |
-| Styling  | Tailwind CSS v4                               |
-| Icons    | Lucide React                                  |
-| Backend  | Node.js, Express 5                            |
-| Database | MySQL (mysql2)                                |
-| Fonts    | ClashDisplay, Epilogue, Geist                 |
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
+![Express](https://img.shields.io/badge/Express-5-000?logo=express)
+![MySQL](https://img.shields.io/badge/MySQL-Database-4479A1?logo=mysql&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 
 ---
-
-## Features
-
-### Core
-
-- **Job Listings** — browse all jobs with keyword search and location search
-- **Filters** — sidebar filtering by category and location with count badges
-- **Job Detail** — full description with sticky "Apply Now" form (name, email, resume URL, cover note)
-- **Admin Panel** — create new jobs, search/filter existing jobs, delete listings, stats overview
-- **Responsive** — fully responsive across mobile, tablet, and desktop
-- **Reusable Components** — modular component structure with clean naming
-
-### Backend
-
-- RESTful API (`GET /api/jobs`, `GET /api/jobs/:id`, `POST /api/jobs`, `DELETE /api/jobs/:id`, `POST /api/applications`)
-- Input validation middleware (required fields, email format, URL validation)
-- Clean API response envelope (`{ success, data }` / `{ success, message, errors }`)
-- Environment-based configuration via `.env`
-
-### Bonus Items
-
-- Improved admin UI with search, stats row, view-job links, and better form feedback
-- Debounced search for smoother filtering
-- Skeleton loading cards on job listings page
-- Filter count badges on sidebar
-- Active filter indicator with clear-all button
-- Environment-based configuration (`.env` for both backend and frontend)
-- Clean API response formatting with consistent envelope
-
----
-
-## Project Structure
-
-```
-QuickHire/
-├── backend/
-│   ├── index.js                 # Express server entry
-│   ├── package.json
-│   ├── .env.example             # Environment variables template
-│   ├── controllers/
-│   │   ├── jobController.js     # Job CRUD logic
-│   │   └── applicationController.js
-│   ├── dbConfig/
-│   │   ├── db.js                # MySQL connection pool
-│   │   └── setupDB.js           # Table creation & seed data
-│   ├── middleware/
-│   │   └── validate.js          # Input validation (jobs, applications)
-│   ├── routes/
-│   │   ├── jobRoutes.js         # Job API routes
-│   │   └── applicationRoutes.js # Application API routes
-│   └── utils/
-│       └── response.js          # Standardized response helpers
-├── frontend/
-│   ├── package.json
-│   ├── .env.example             # Frontend env template
-│   └── src/
-│       ├── app/                 # Next.js App Router pages
-│       │   ├── layout.tsx       # Root layout (fonts, header, footer)
-│       │   ├── page.tsx         # Landing page
-│       │   ├── globals.css      # Tailwind theme & global styles
-│       │   ├── jobs/
-│       │   │   ├── page.tsx     # Job listings page
-│       │   │   └── [id]/
-│       │   │       └── page.tsx # Job detail page
-│       │   └── admin/
-│       │       └── page.tsx     # Admin panel
-│       ├── components/
-│       │   ├── layout/          # Header, Footer, Container
-│       │   ├── home/            # Landing page sections
-│       │   ├── jobs/            # JobCard, JobListings, SearchBar, etc.
-│       │   └── admin/           # AdminPanel
-│       ├── lib/
-│       │   ├── api.ts           # API client functions
-│       │   └── types.ts         # TypeScript interfaces
-│       └── fonts/               # Local ClashDisplay font files
-└── README.md
-```
 
 ---
 
@@ -100,32 +18,38 @@ QuickHire/
 
 ### Prerequisites
 
-- **Node.js** 18+
-- **MySQL** database (local or remote)
+- **Node.js**
+- **MySQL** database (local or hosted)
 
-### 1. Clone the repository
+### 1. Clone
 
 ```bash
 git clone https://github.com/<your-username>/QuickHire.git
 cd QuickHire
 ```
 
-### 2. Set up the Backend
+### 2. Backend
 
 ```bash
 cd backend
 npm install
 ```
 
-Create a `.env` file (see `.env.example`):
+Copy `.env.example` to `.env` and fill in your values:
 
 ```env
 PORT=5000
+
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=your_password
 DB_NAME=quickhire
+
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=password
+
+ALLOWED_ORIGINS=http://localhost:3000
 ```
 
 Start the server:
@@ -134,16 +58,16 @@ Start the server:
 npm run dev
 ```
 
-The backend will run at `http://localhost:5000`. On first run it automatically creates tables and seeds demo data.
+> The server runs at **http://localhost:5000**. On first start, it automatically creates the `jobs` and `applications` tables and seeds 19 sample jobs + 61 sample applications.
 
-### 3. Set up the Frontend
+### 3. Frontend
 
 ```bash
 cd frontend
 npm install
 ```
 
-Create a `.env.local` file (see `.env.example`):
+Create `.env.local`:
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:5000
@@ -155,73 +79,182 @@ Start the dev server:
 npm run dev
 ```
 
-The frontend will run at `http://localhost:3000`.
+> Open **http://localhost:3000** in your browser.
 
 ---
 
-## API Endpoints
+## What It Does
 
-| Method | Endpoint            | Description              |
-| ------ | ------------------- | ------------------------ |
-| GET    | `/api/jobs`         | List all jobs            |
-| GET    | `/api/jobs/:id`     | Get single job details   |
-| POST   | `/api/jobs`         | Create a new job (Admin) |
-| DELETE | `/api/jobs/:id`     | Delete a job (Admin)     |
-| POST   | `/api/applications` | Submit a job application |
+**For Job Seekers:**
 
-### Response Format
+- Browse all available jobs on a clean listings page
+- Search by keyword and location with instant results
+- Filter by category (Design, Technology, Marketing, etc.) and location
+- View full job details with company info and description
+- Apply directly with name, email, resume link, and cover note
 
-All endpoints return a consistent envelope:
+**For Admins:**
 
-```json
-// Success
-{ "success": true, "data": { ... } }
+- Secure login with token-based authentication
+- Dashboard with stats overview (total jobs, categories, locations, applications)
+- Create new job listings with category selection
+- Search, view, and delete existing jobs
+- Browse all submitted applications with applicant details
+- Confirmation dialogs before destructive actions
 
-// Error
-{ "success": false, "message": "Error description", "errors": ["field is required"] }
+---
+
+## Tech Stack
+
+| Layer    | Tech                                           |
+| -------- | ---------------------------------------------- |
+| Frontend | Next.js 16.1.6, React 19.2.3, TypeScript 5     |
+| Styling  | Tailwind CSS v4                                |
+| Icons    | Lucide React 0.577.0                           |
+| Backend  | Node.js, Express 5.2.1                         |
+| Database | MySQL (mysql2 3.19.1)                          |
+| Auth     | HMAC-SHA256 token, stored in localStorage      |
+| Fonts    | ClashDisplay (local), Epilogue, Geist (Google) |
+
+---
+
+## Project Structure
+
+```
+QuickHire/
+│
+├── backend/
+│   ├── index.js                     # Server entry — Express, CORS, routes
+│   ├── .env.example                 # Environment template
+│   ├── controllers/
+│   │   ├── jobController.js         # Job CRUD operations
+│   │   └── applicationController.js # Application queries
+│   ├── dbConfig/
+│   │   ├── db.js                    # MySQL connection pool
+│   │   └── setupDB.js              # Auto table creation + seed data
+│   ├── middleware/
+│   │   ├── auth.js                  # Token generation & admin guard
+│   │   └── validate.js             # Input validation (email, URL, required fields)
+│   ├── routes/
+│   │   ├── authRoutes.js           # POST /login, GET /check
+│   │   ├── jobRoutes.js            # GET, POST, DELETE /jobs
+│   │   └── applicationRoutes.js    # GET (admin), POST /applications
+│   └── utils/
+│       └── response.js             # Standardized JSON response helpers
+│
+├── frontend/
+│   ├── .env.example                 # Frontend environment template
+│   └── src/
+│       ├── app/
+│       │   ├── layout.tsx          # Root layout — fonts, header, footer
+│       │   ├── page.tsx            # Home / landing page
+│       │   ├── globals.css         # Theme tokens, Tailwind config
+│       │   ├── login/page.tsx      # Admin login
+│       │   ├── admin/page.tsx      # Admin dashboard
+│       │   └── jobs/
+│       │       ├── page.tsx        # Job listings
+│       │       └── [id]/page.tsx   # Job detail + apply form
+│       ├── components/
+│       │   ├── layout/             # Header, Footer, Container
+│       │   ├── home/               # HeroSection, FeaturedJobs, Categories, Companies, PostJobs
+│       │   ├── jobs/               # JobCard, JobListings, JobDetail, SearchBar, FilterSidebar, ApplicationForm
+│       │   └── admin/              # AdminPanel, JobList, ApplicationList, Modals (Job, Application, Confirm)
+│       └── lib/
+│           ├── api.ts              # Centralized API client with auth helpers
+│           ├── types.ts            # TypeScript interfaces (Job, Application, ApplicationWithJob)
+│           ├── CategoryList.tsx    # Shared category constants
+│           └── CategoryStyle.tsx   # Category color mapping
+│
+└── README.md
 ```
 
----
+## API Reference
 
-## Environment Variables
+All responses use a consistent JSON envelope:
 
-### Backend (`backend/.env`)
+```json
+{ "success": true, "data": { ... } }
+{ "success": false, "message": "...", "errors": ["..."] }
+```
 
-| Variable      | Description         | Default |
-| ------------- | ------------------- | ------- |
-| `PORT`        | Server port         | `5000`  |
-| `DB_HOST`     | MySQL host          | —       |
-| `DB_PORT`     | MySQL port          | `3306`  |
-| `DB_USER`     | MySQL username      | —       |
-| `DB_PASSWORD` | MySQL password      | —       |
-| `DB_NAME`     | MySQL database name | —       |
+### Auth
 
-### Frontend (`frontend/.env.local`)
+| Method | Endpoint          | Auth | Description                             |
+| ------ | ----------------- | ---- | --------------------------------------- |
+| POST   | `/api/auth/login` | —    | Login with username/password, get token |
+| GET    | `/api/auth/check` | Yes  | Verify if current token is valid        |
 
-| Variable              | Description     | Default                 |
-| --------------------- | --------------- | ----------------------- |
-| `NEXT_PUBLIC_API_URL` | Backend API URL | `http://localhost:5000` |
+### Jobs
 
----
+| Method | Endpoint                    | Auth  | Description                             |
+| ------ | --------------------------- | ----- | --------------------------------------- |
+| GET    | `/api/jobs`                 | —     | List all jobs (newest first)            |
+| GET    | `/api/jobs/featured`        | —     | Get top featured jobs (limit via query) |
+| GET    | `/api/jobs/:id`             | —     | Get single job by ID                    |
+| GET    | `/api/jobs/count/:category` | —     | Get job count for a category            |
+| POST   | `/api/jobs`                 | Admin | Create a new job listing                |
+| DELETE | `/api/jobs/:id`             | Admin | Delete a job (cascades to applications) |
 
-## Scripts
+### Applications
 
-### Backend
+| Method | Endpoint            | Auth  | Description                              |
+| ------ | ------------------- | ----- | ---------------------------------------- |
+| GET    | `/api/applications` | Admin | List all applications (with job details) |
+| POST   | `/api/applications` | —     | Submit a job application                 |
 
-| Script        | Command            | Description            |
-| ------------- | ------------------ | ---------------------- |
-| `npm run dev` | `nodemon index.js` | Start with auto-reload |
-
-### Frontend
-
-| Script          | Command      | Description             |
-| --------------- | ------------ | ----------------------- |
-| `npm run dev`   | `next dev`   | Start dev server        |
-| `npm run build` | `next build` | Production build        |
-| `npm start`     | `next start` | Start production server |
+**Admin-protected routes** require a `Bearer <token>` header obtained from `/api/auth/login`.
 
 ---
 
-## Design Reference
+## Database Schema
 
-UI is based on the Figma template provided in the task specification, closely following the layout structure, typography, color scheme, and spacing.
+Tables are auto-created on server startup. No manual migrations needed.
+
+### `jobs`
+
+| Column      | Type         | Constraints                       |
+| ----------- | ------------ | --------------------------------- |
+| id          | INT          | PRIMARY KEY, AUTO_INCREMENT       |
+| title       | VARCHAR(255) | NOT NULL                          |
+| company     | VARCHAR(255) | NOT NULL                          |
+| logo        | TEXT         | Nullable — company logo URL       |
+| location    | VARCHAR(100) | NOT NULL                          |
+| category    | TEXT         | NOT NULL — comma-separated values |
+| description | TEXT         | NOT NULL                          |
+| created_at  | TIMESTAMP    | DEFAULT CURRENT_TIMESTAMP         |
+
+### `applications`
+
+| Column      | Type         | Constraints                                        |
+| ----------- | ------------ | -------------------------------------------------- |
+| id          | INT          | PRIMARY KEY, AUTO_INCREMENT                        |
+| job_id      | INT          | NOT NULL, FOREIGN KEY → jobs(id) ON DELETE CASCADE |
+| name        | VARCHAR(255) | NOT NULL                                           |
+| email       | VARCHAR(255) | NOT NULL                                           |
+| resume_link | TEXT         | NOT NULL                                           |
+| cover_note  | TEXT         | Nullable                                           |
+| created_at  | TIMESTAMP    | DEFAULT CURRENT_TIMESTAMP                          |
+
+---
+
+## Key Highlights
+
+- **Auto-setup** — tables and seed data are created on first server start, zero manual SQL needed
+- **Skeleton loading** — animated placeholder cards while jobs are fetching
+- **Debounced search** — 250ms delay on keyword and location inputs for smooth UX
+- **Category count badges** — each filter shows how many jobs match
+- **Sticky apply form** — application form stays visible while scrolling job details
+- **Delete cascade** — deleting a job automatically removes all its applications
+- **Responsive everywhere** — mobile-first design with proper breakpoints for tablet and desktop
+- **Consistent API envelope** — every endpoint returns `{ success, data }` or `{ success, message, errors }`
+- **CORS configuration** — allowed origins controlled via environment variable
+
+---
+
+## Design
+
+UI follows the provided Figma template with matching layout, typography, colors, and spacing.
+
+**Color palette:** `#4640DE` (primary), `#25324B` (text), `#515B6F` (secondary), `#7C8493` (muted), `#F8F8FD` (background)
+
+**Fonts:** ClashDisplay for headings, Geist Sans for body, Epilogue for accents

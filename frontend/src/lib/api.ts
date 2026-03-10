@@ -1,4 +1,4 @@
-import { Job } from "./types";
+import { Job, ApplicationWithJob } from "./types";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
@@ -23,13 +23,47 @@ async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
     return json?.data !== undefined ? json.data : json;
 }
 
+/* ── Auth helpers ── */
+
+function getAuthHeaders(): Record<string, string> {
+    if (typeof window === "undefined") return {};
+    const token = localStorage.getItem("admin_token");
+    return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+export async function adminLogin(
+    username: string,
+    password: string,
+): Promise<{ token: string }> {
+    return apiFetch<{ token: string }>(`${API_BASE}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+    });
+}
+
+export async function checkAdminAuth(): Promise<boolean> {
+    try {
+        await apiFetch(`${API_BASE}/api/auth/check`, {
+            headers: { ...getAuthHeaders() },
+        });
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+export function adminLogout() {
+    if (typeof window !== "undefined") {
+        localStorage.removeItem("admin_token");
+    }
+}
+
 /* ── Jobs ── */
 
 export async function fetchJobs(): Promise<Job[]> {
     return apiFetch<Job[]>(`${API_BASE}/api/jobs`);
 }
-
-
 
 /*
 
@@ -44,13 +78,15 @@ router.get("/featured", async (req, res) => {
     }
 });
 */
-export async function fetchFeaturedJobs({ limit = 8, featured = true }: { limit?: number; featured?: boolean } = {}): Promise<Job[]> {
+export async function fetchFeaturedJobs({
+    limit = 8,
+    featured = true,
+}: { limit?: number; featured?: boolean } = {}): Promise<Job[]> {
     console.log("Fetching featured jobs with limit", limit);
     const url = new URL(`${API_BASE}/api/jobs/featured`);
     url.searchParams.append("limit", limit.toString());
     return apiFetch<Job[]>(url.toString());
 }
-
 
 // export async function fetchFeaturedJobs({ limit, featured }: { limit: number; featured: boolean }): Promise<Job[]> {
 //     const url = new URL(`${API_BASE}/api/jobs/featured`);
@@ -68,7 +104,7 @@ export async function createJob(
 ): Promise<Job> {
     return apiFetch<Job>(`${API_BASE}/api/jobs`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
         body: JSON.stringify(data),
     });
 }
@@ -76,13 +112,24 @@ export async function createJob(
 export async function deleteJob(id: number): Promise<{ message: string }> {
     return apiFetch<{ message: string }>(`${API_BASE}/api/jobs/${id}`, {
         method: "DELETE",
+        headers: { ...getAuthHeaders() },
     });
 }
 
-export async function fetchJobCountByCategory(category: string): Promise<{ category: string; count: number }> {
-    return apiFetch<{ category: string; count: number }>(`${API_BASE}/api/jobs/count/${encodeURIComponent(category)}`);
+export async function fetchJobCountByCategory(
+    category: string,
+): Promise<{ category: string; count: number }> {
+    return apiFetch<{ category: string; count: number }>(
+        `${API_BASE}/api/jobs/count/${encodeURIComponent(category)}`,
+    );
 }
 /* ── Applications ── */
+
+export async function fetchApplications(): Promise<ApplicationWithJob[]> {
+    return apiFetch<ApplicationWithJob[]>(`${API_BASE}/api/applications`, {
+        headers: { ...getAuthHeaders() },
+    });
+}
 
 export async function submitApplication(data: {
     job_id: number;
