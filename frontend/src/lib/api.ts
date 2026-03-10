@@ -119,6 +119,7 @@ export async function deleteJob(id: number): Promise<{ message: string }> {
 export async function fetchJobCountByCategory(
     category: string,
 ): Promise<{ category: string; count: number }> {
+    console.log("Fetching job count for category", category);
     return apiFetch<{ category: string; count: number }>(
         `${API_BASE}/api/jobs/count/${encodeURIComponent(category)}`,
     );
