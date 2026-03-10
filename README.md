@@ -24,7 +24,7 @@ Built with **Next.js 16** + **TypeScript** on the frontend and **Express 5** + *
 ### 1. Clone
 
 ```bash
-git clone https://github.com/<your-username>/QuickHire.git
+git clone https://github.com/mhr-noyon/QuickHire.git
 cd QuickHire
 ```
 
