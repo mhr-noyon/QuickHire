@@ -45,15 +45,16 @@ export default function Header() {
                     </Link>
 
                     <nav className="hidden items-center gap-8 md:flex">
-                        {navLinks.map((item) => (
-                            <Link
-                                key={item.label}
-                                href={item.href}
-                                className="text-[16px] font-medium text-[#515B6F] transition hover:text-[#25324B]"
-                            >
-                                {item.label}
-                            </Link>
-                        ))}
+                        {!isAdmin &&
+                            navLinks.map((item) => (
+                                <Link
+                                    key={item.label}
+                                    href={item.href}
+                                    className="text-[16px] font-medium text-[#515B6F] transition hover:text-[#25324B]"
+                                >
+                                    {item.label}
+                                </Link>
+                            ))}
                     </nav>
                 </div>
 

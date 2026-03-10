@@ -62,11 +62,11 @@ export default function HeroSection() {
                         <div className="relative z-20 mt-10 w-full lg:w-[900px]">
                             {/* Main Card Container */}
                             <div className="bg-white p-4 shadow-[0_12px_40px_rgba(0,0,0,0.06)]">
-                                <div className="flex flex-col lg:flex-row items-center gap-2 lg:h-[50px]">
+                                <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-2 lg:h-[50px]">
                                     {/* 1. Job Input Section */}
-                                    <div className="flex flex-1 items-center gap-4 w-full pr-4">
+                                    <div className="flex flex-1 items-center gap-4 w-full lg:pr-4">
                                         <Search
-                                            className="h-6 w-6 text-[#25324B]"
+                                            className="h-6 w-6 text-[#25324B] shrink-0"
                                             strokeWidth={2.5}
                                         />
                                         <div className="w-full border-b-[1.5px] border-[#D6DDEB] py-2">
@@ -78,10 +78,10 @@ export default function HeroSection() {
                                         </div>
                                     </div>
 
-                                    {/* 2. Location Section */}
-                                    <div className="relative flex flex-1 items-center gap-4 w-full px-4">
+                                    {/* 2. Location Section - Adjusted padding for mobile */}
+                                    <div className="relative flex flex-1 items-center gap-4 w-full lg:px-4">
                                         <MapPin
-                                            className="h-6 w-6 text-[#25324B]"
+                                            className="h-6 w-6 text-[#25324B] shrink-0"
                                             strokeWidth={2.5}
                                         />
 
@@ -97,10 +97,11 @@ export default function HeroSection() {
                                                     {selectedLocation}
                                                 </span>
                                                 <ChevronDown
-                                                    className={`h-5 w-5 text-[#7C8493] transition-transform ${isOpen
+                                                    className={`h-5 w-5 text-[#7C8493] transition-transform ${
+                                                        isOpen
                                                             ? "rotate-180"
                                                             : ""
-                                                        }`}
+                                                    }`}
                                                 />
                                             </button>
 
@@ -141,17 +142,17 @@ export default function HeroSection() {
                                             )}
                                         </div>
                                     </div>
-                                    {/* 4. The "Search my job" Button */}
+
+                                    {/* 4. The Button - Added mt-2 for mobile spacing */}
                                     <button
                                         type="button"
-                                        className="cursor-pointer w-full lg:w-auto lg:min-w-[210px] h-full bg-[#4640DE] px-10 py-4 lg:py-0 text-[18px] font-bold text-white transition-all hover:bg-[#3b36c0] active:scale-95"
+                                        className="cursor-pointer w-full lg:w-auto lg:min-w-[210px] h-full bg-[#4640DE] px-10 py-4 lg:py-0 text-[18px] font-bold text-white transition-all hover:bg-[#3b36c0] active:scale-95 mt-2 lg:mt-0"
                                     >
                                         Search my job
                                     </button>
                                 </div>
                             </div>
                         </div>
-
                         <p className="mt-5 text-[18px] text-[#7C8493]">
                             <span className="text-[#515B6F]">Popular :</span> UI
                             Designer, UX Researcher, Android, Admin
