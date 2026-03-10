@@ -36,8 +36,19 @@ async function createJob(jobData) {
     }
 }
 
+async function deleteJob(id) {
+    try {
+        await db.query("DELETE FROM jobs WHERE id = ?", [id]);
+        return { message: "Job deleted successfully" };
+    } catch (err) {
+        console.error(`Error deleting job with id ${id}:`, err);
+        throw err;
+    }   
+}
+
 module.exports = {
     getAllJobs,
     getJobById,
     createJob,
+    deleteJob,
 };

@@ -1,10 +1,16 @@
-import Container from "@/components/layout/Container";
+import { Suspense } from "react";
+import JobListings from "@/components/jobs/JobListings";
+
+export const metadata = {
+    title: "Find Jobs — QuickHire",
+    description:
+        "Browse open positions, search and filter by category or location.",
+};
 
 export default function JobsPage() {
     return (
-        <Container>
-            <h1 className="text-3xl font-bold tracking-tight">All Jobs</h1>
-            <p className="mt-2 text-muted">Browse and filter job listings.</p>
-        </Container>
+        <Suspense>
+            <JobListings />
+        </Suspense>
     );
 }

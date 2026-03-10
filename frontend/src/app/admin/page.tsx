@@ -1,10 +1,10 @@
-import Container from "@/components/layout/Container";
+import AdminPanel from "@/components/admin/AdminPanel";
+
+export const metadata = {
+    title: "Admin — QuickHire",
+    description: "Manage job listings.",
+};
 
 export default function AdminPage() {
-    return (
-        <Container>
-            <h1 className="text-3xl font-bold tracking-tight">Admin Panel</h1>
-            <p className="mt-2 text-muted">Manage job listings from here.</p>
-        </Container>
-    );
+    return <AdminPanel />;
 }
