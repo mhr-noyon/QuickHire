@@ -46,9 +46,38 @@ async function deleteJob(id) {
     }   
 }
 
+async function getFeaturedJobs(limit = 5) {
+    try {
+        console.log(`Fetching top ${limit} featured jobs`);
+        const [rows] = await db.query(
+            "SELECT * FROM jobs ORDER BY created_at DESC LIMIT ?",
+            [limit],
+        );
+        return rows;
+    } catch (err) {
+        console.error("Error fetching top jobs:", err);
+        throw err;
+    }
+}
+
+async function getJobCountByCategory(category) {
+    try {
+        const [rows] = await db.query(
+            "SELECT COUNT(*) as count FROM jobs WHERE category LIKE ?",
+            [`%${category}%`],
+        );
+        return rows[0].count;
+    } catch (err) {
+        console.error(`Error fetching jobs with category ${category}:`, err);
+        throw err;
+    }
+}
+
 module.exports = {
     getAllJobs,
     getJobById,
     createJob,
     deleteJob,
+    getJobCountByCategory,
+    getFeaturedJobs,
 };

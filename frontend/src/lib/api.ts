@@ -9,6 +9,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
     const res = await fetch(url, { cache: "no-store", ...options });
     const json = await res.json();
+    console.log("API response:", json);
 
     // Support both wrapped { success, data } and legacy flat responses
     if (!res.ok) {
@@ -27,6 +28,36 @@ async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
 export async function fetchJobs(): Promise<Job[]> {
     return apiFetch<Job[]>(`${API_BASE}/api/jobs`);
 }
+
+
+
+/*
+
+router.get("/featured", async (req, res) => {
+    try {
+        const limit = parseInt(req.query.limit) || 8;
+        console.log("Received request for featured jobs for ", limit);
+        const jobs = await getFeaturedJobs(limit);
+        return success(res, jobs);
+    } catch (err) {
+        return error(res, "Failed to fetch featured jobs");
+    }
+});
+*/
+export async function fetchFeaturedJobs({ limit = 8, featured = true }: { limit?: number; featured?: boolean } = {}): Promise<Job[]> {
+    console.log("Fetching featured jobs with limit", limit);
+    const url = new URL(`${API_BASE}/api/jobs/featured`);
+    url.searchParams.append("limit", limit.toString());
+    return apiFetch<Job[]>(url.toString());
+}
+
+
+// export async function fetchFeaturedJobs({ limit, featured }: { limit: number; featured: boolean }): Promise<Job[]> {
+//     const url = new URL(`${API_BASE}/api/jobs/featured`);
+//     url.searchParams.append("limit", limit.toString());
+//     url.searchParams.append("featured", featured.toString());
+//     return apiFetch<Job[]>(url.toString());
+// }
 
 export async function fetchJobById(id: string | number): Promise<Job> {
     return apiFetch<Job>(`${API_BASE}/api/jobs/${id}`);
@@ -48,6 +79,9 @@ export async function deleteJob(id: number): Promise<{ message: string }> {
     });
 }
 
+export async function fetchJobCountByCategory(category: string): Promise<{ category: string; count: number }> {
+    return apiFetch<{ category: string; count: number }>(`${API_BASE}/api/jobs/count/${encodeURIComponent(category)}`);
+}
 /* ── Applications ── */
 
 export async function submitApplication(data: {

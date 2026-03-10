@@ -50,6 +50,7 @@ function useDebounce(value: string, delay: number) {
 export default function JobListings() {
     const searchParams = useSearchParams();
     const initialCategory = searchParams.get("category") || "";
+    console.log("Initial category from URL:", initialCategory);
 
     const [jobs, setJobs] = useState<Job[]>([]);
     const [loading, setLoading] = useState(true);
@@ -69,16 +70,20 @@ export default function JobListings() {
     /* Fetch jobs */
     useEffect(() => {
         fetchJobs()
-            .then(setJobs)
-            .catch(() =>
-                setError("Could not load jobs. Is the backend running?"),
-            )
+            .then((data) => {
+                setJobs(data);
+            })
+            .catch(() => {
+                console.error("Failed to fetch jobs. Is the backend running?");
+                setError("Could not load jobs. Is the backend running?");
+            })
             .finally(() => setLoading(false));
+        console.log("Fetched jobs:", jobs);
     }, []);
 
     /* Derive unique filter options */
     const categories = useMemo(
-        () => [...new Set(jobs.map((j) => j.category))].sort(),
+        () => [...new Set(jobs.flatMap((j) => j.category.split(', ')))].sort(),
         [jobs],
     );
     const locations = useMemo(
@@ -90,7 +95,9 @@ export default function JobListings() {
     const categoryCounts = useMemo(() => {
         const counts: Record<string, number> = {};
         jobs.forEach((j) => {
-            counts[j.category] = (counts[j.category] || 0) + 1;
+            j.category.split(', ').forEach((cat) => {
+                counts[cat] = (counts[cat] || 0) + 1;
+            });
         });
         return counts;
     }, [jobs]);
@@ -125,7 +132,7 @@ export default function JobListings() {
                     .includes(debouncedLocationSearch.toLowerCase());
 
             const matchCategory =
-                !selectedCategory || job.category === selectedCategory;
+                !selectedCategory || job.category.split(', ').includes(selectedCategory);
 
             const matchLocationFilter =
                 !selectedLocation || job.location === selectedLocation;

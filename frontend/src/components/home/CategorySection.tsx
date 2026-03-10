@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import {
     ArrowRight,
@@ -10,52 +11,39 @@ import {
     Users,
     Wallet,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import Container from "@/components/layout/Container";
+import { fetchJobCountByCategory } from "@/lib/api";
 
 const categories = [
-    {
-        title: "Design",
-        jobs: 235,
-        icon: Palette,
-    },
-    {
-        title: "Sales",
-        jobs: 756,
-        icon: ChartNoAxesColumn,
-    },
-    {
-        title: "Marketing",
-        jobs: 140,
-        icon: Megaphone,
-    },
-    {
-        title: "Finance",
-        jobs: 325,
-        icon: Wallet,
-    },
-    {
-        title: "Technology",
-        jobs: 436,
-        icon: Monitor,
-    },
-    {
-        title: "Engineering",
-        jobs: 542,
-        icon: CodeXml,
-    },
-    {
-        title: "Business",
-        jobs: 211,
-        icon: BriefcaseBusiness,
-    },
-    {
-        title: "Human Resource",
-        jobs: 346,
-        icon: Users,
-    },
+    { title: "Design", icon: Palette, jobs: 0 },
+    { title: "Sales", icon: ChartNoAxesColumn, jobs: 0 },
+    { title: "Marketing", icon: Megaphone, jobs: 0 },
+    { title: "Finance", icon: Wallet, jobs: 0 },
+    { title: "Technology", icon: Monitor, jobs: 0 },
+    { title: "Engineering", icon: CodeXml, jobs: 0 },
+    { title: "Business", icon: BriefcaseBusiness, jobs: 0 },
+    { title: "Human Resource", icon: Users, jobs: 0 },
 ];
 
 export default function CategorySection() {
+    // get job counts for each category from backend
+    const fetchJobCounts = async () => {
+        const counts = await Promise.all(
+            categories.map(async (category) => {
+                const { count } = await fetchJobCountByCategory(category.title);
+                return { ...category, jobs: count };
+            }),
+        );
+        return counts;
+    };
+
+    const [jobCounts, setJobCounts] = useState<typeof categories>(categories);
+
+    useEffect(() => {
+        fetchJobCounts().then(setJobCounts);
+    }, []);
+
     return (
         <section className="bg-[#FFFFFF] py-20 lg:py-24">
             <Container>
@@ -80,7 +68,6 @@ export default function CategorySection() {
                 <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4">
                     {categories.map((category) => {
                         const Icon = category.icon;
-                        
 
                         return (
                             <Link
@@ -107,7 +94,12 @@ export default function CategorySection() {
 
                                         <div className="mt-5 flex items-center justify-between gap-4">
                                             <p className="text-[18px] text-[#7C8493] transition group-hover:text-white/90">
-                                                {category.jobs} jobs available
+                                                {jobCounts.find(
+                                                    (c) =>
+                                                        c.title ===
+                                                        category.title,
+                                                )?.jobs || 0}{" "}
+                                                jobs available
                                             </p>
 
                                             <ArrowRight

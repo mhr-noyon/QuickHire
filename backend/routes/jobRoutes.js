@@ -5,6 +5,8 @@ const {
     getJobById,
     createJob,
     deleteJob,
+    getJobCountByCategory,
+    getFeaturedJobs,
 } = require("../controllers/jobController");
 const { validateJob } = require("../middleware/validate");
 const {
@@ -25,6 +27,22 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.get("/featured", async (req, res) => {
+    try {
+        console.log(
+            "Received request for featured jobs with query:",
+            req.query,
+        );
+        const limit = parseInt(req.query.limit) || 8;
+        console.log("Received request for featured jobs for ", limit);
+        const jobs = await getFeaturedJobs(limit);
+        return success(res, jobs);
+    } catch (err) {
+        console.error("Error fetching featured jobs:", err);
+        return error(res, "Failed to fetch featured jobs");
+    }
+});
+
 /* GET /api/jobs/:id — single job */
 router.get("/:id", async (req, res) => {
     const { id } = req.params;
@@ -36,6 +54,18 @@ router.get("/:id", async (req, res) => {
         return error(res, "Failed to fetch job");
     }
 });
+
+router.get("/count/:category", async (req, res) => {
+    const { category } = req.params;
+    try {
+        const count = await getJobCountByCategory(category);
+        return success(res, { category, count });
+    } catch (err) {
+        return error(res, "Failed to fetch job count");
+    }
+});
+
+
 
 /* POST /api/jobs — create job (admin) */
 router.post("/", async (req, res) => {

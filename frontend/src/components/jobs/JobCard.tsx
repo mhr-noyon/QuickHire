@@ -1,21 +1,7 @@
 import Link from "next/link";
 import { MapPin, Briefcase, Clock } from "lucide-react";
 import { Job } from "@/lib/types";
-
-const categoryColors: Record<string, string> = {
-    Design: "bg-[#EBF5F4] text-[#56CDAD]",
-    Sales: "bg-[#FFF4F1] text-[#FFB836]",
-    Marketing: "bg-[#FFF4F1] text-[#FFB836]",
-    Finance: "bg-[#EEE8FF] text-[#4640DE]",
-    Technology: "bg-[#FFF0F0] text-[#FF6550]",
-    Engineering: "bg-[#FFF0F0] text-[#FF6550]",
-    Business: "bg-[#EEE8FF] text-[#4640DE]",
-    "Human Resource": "bg-[#EBF5F4] text-[#56CDAD]",
-};
-
-function getCategoryStyle(category: string): string {
-    return categoryColors[category] || "bg-[#F0F0F7] text-[#515B6F]";
-}
+import { getCategoryStyle } from "@/lib/CategoryStyle";
 
 function timeAgo(dateString: string): string {
     const diff = Date.now() - new Date(dateString).getTime();
@@ -40,9 +26,17 @@ export default function JobCard({ job }: JobCardProps) {
         >
             {/* Top row */}
             <div className="flex items-start justify-between gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-md bg-[#F0F0F7] text-[20px] font-bold text-[#4640DE]">
-                    {job.company.charAt(0)}
-                </div>
+                {job.logo ? (
+                    <img
+                        src={job.logo}
+                        alt={job.company}
+                        className="h-12 w-12 rounded-md object-cover"
+                    />
+                ) : (
+                    <div className="flex h-12 w-12 items-center justify-center rounded-md bg-[#F0F0F7] text-[20px] font-bold text-[#4640DE]">
+                        {job.company.charAt(0)}
+                    </div>
+                )}
                 <span className="inline-flex h-[36px] items-center border border-[#4640DE] px-3 text-[14px] font-medium text-[#4640DE]">
                     Full Time
                 </span>
@@ -76,11 +70,19 @@ export default function JobCard({ job }: JobCardProps) {
 
             {/* Category tag */}
             <div className="mt-auto pt-2">
-                <span
+                {job.category.split(", ").map((cat) => (
+                    <span
+                        key={cat}
+                        className={`inline-flex h-[32px] items-center rounded-full px-4 text-[14px] font-medium ${getCategoryStyle(cat)}`}
+                    >
+                        {cat}
+                    </span>
+                ))}
+                {/* <span
                     className={`inline-flex h-[32px] items-center rounded-full px-4 text-[14px] font-medium ${getCategoryStyle(job.category)}`}
                 >
                     {job.category}
-                </span>
+                </span> */}
             </div>
         </Link>
     );
