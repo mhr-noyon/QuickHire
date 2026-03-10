@@ -28,7 +28,11 @@ export default function JobDetailModal({ job, onClose }: { job: Job; onClose: ()
                 <div className="p-6">
                     <div className="flex items-center gap-4">
                         <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-md bg-[#F0F0F7] text-[20px] font-bold text-[#4640DE]">
-                            {job.company.charAt(0)}
+                            {job.logo ? (
+                                <img src={job.logo} alt={job.company} className="h-full w-full object-cover" />
+                            ) : (
+                                job.company.charAt(0)
+                            )}
                         </div>
                         <div>
                             <h3 className="text-[20px] font-semibold text-[#25324B]">
