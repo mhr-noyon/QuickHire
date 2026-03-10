@@ -1,24 +1,29 @@
+import Image from "next/image";
 import Container from "@/components/layout/Container";
+import HeroSection from "@/components/home/HeroSection";
+import CompaniesSection from "@/components/home/CompaniesSection";
+import CategorySection from "@/components/home/CategorySection";
 
 export default function Home() {
     return (
         <Container>
-            <section className="py-12 text-center">
-                <h1 className="text-4xl font-bold tracking-tight text-foreground">
-                    Find Your Next Opportunity
-                </h1>
-                <p className="mt-4 text-lg text-muted max-w-xl mx-auto">
-                    Browse open positions, filter by category or location, and
-                    apply in seconds.
-                </p>
+            <section className="relative overflow-hidden bg-[#F8F8FD]">
+                <div className="pointer-events-none absolute top-0 right-0 z-10">
+                    <Image
+                        src="/pattern.svg"
+                        alt=""
+                        width={860}
+                        height={794}
+                        priority
+                        className="h-auto w-[1020px] max-w-none lg:w-[1040px] xl:w-[1050px]"
+                    />
+                </div>
+
+                <HeroSection />
             </section>
 
-            {/* Job listings will go here */}
-            <section className="py-8">
-                <p className="text-center text-muted">
-                    Job listings coming soon.
-                </p>
-            </section>
+            <CompaniesSection />
+            <CategorySection />
         </Container>
     );
 }

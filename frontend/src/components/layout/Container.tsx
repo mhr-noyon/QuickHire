@@ -1,12 +1,19 @@
-interface ContainerProps {
-  children: React.ReactNode;
-  className?: string;
-}
+import { ReactNode } from "react";
 
-export default function Container({ children, className = "" }: ContainerProps) {
-  return (
-    <div className={`container ${className}`.trim()}>
-      {children}
-    </div>
-  );
+type ContainerProps = {
+    children: ReactNode;
+    className?: string;
+};
+
+export default function Container({
+    children,
+    className = "",
+}: ContainerProps) {
+    return (
+        <div
+            className={`font-epilogue mx-auto w-full max-w-[1400px] px-6 lg:px-16 ${className}`}
+        >
+            {children}
+        </div>
+    );
 }
