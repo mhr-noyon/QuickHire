@@ -28,6 +28,7 @@
     /* Fonts */
     --font-sans: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
+    --font-epilogue: var(--font-epilogue);
 
     /* Consistent spacing scale (used via Tailwind classes) */
     --spacing-18: 4.5rem;
