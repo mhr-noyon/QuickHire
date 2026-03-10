@@ -96,7 +96,7 @@ export default function Footer() {
                             />
                             <button
                                 type="submit"
-                                className="h-14 min-w-[140px] bg-[#4640DE] px-6 text-[16px] font-semibold text-white transition hover:bg-[#3b35c9]"
+                                className="cursor-pointer h-14 min-w-[140px] bg-[#4640DE] px-6 text-[16px] font-semibold text-white transition hover:bg-[#3b35c9]"
                             >
                                 Subscribe
                             </button>

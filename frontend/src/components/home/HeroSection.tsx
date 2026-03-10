@@ -1,11 +1,22 @@
+"use client";
+import { useState } from "react";
 import Image from "next/image";
 import Container from "@/components/layout/Container";
 import { Search, MapPin, ChevronDown } from "lucide-react";
 
 export default function HeroSection() {
+    const [selectedLocation, setSelectedLocation] = useState("Florence, Italy");
+    const [isOpen, setIsOpen] = useState(false);
+
+    const locations = [
+        "Florence, Italy",
+        "Madrid, Spain",
+        "Berlin, Germany",
+        "Ontario, Canada",
+    ];
     return (
         <section className="relative overflow-hidden bg-[#F8F8FD]">
-            <div className="relative z-10">
+            <Container className="relative z-10">
                 <div className="grid min-h-[720px] items-center lg:grid-cols-[620px_1fr] lg:gap-0">
                     <div className="w-full">
                         <h1
@@ -68,23 +79,72 @@ export default function HeroSection() {
                                     </div>
 
                                     {/* 2. Location Section */}
-                                    <div className="flex flex-1 items-center gap-4 w-full px-4">
+                                    <div className="relative flex flex-1 items-center gap-4 w-full px-4">
                                         <MapPin
                                             className="h-6 w-6 text-[#25324B]"
                                             strokeWidth={2.5}
                                         />
-                                        <div className="flex w-full items-center justify-between border-b-[1.5px] border-[#D6DDEB] py-2 cursor-pointer">
-                                            <span className="text-[18px] font-medium text-[#25324B]">
-                                                Florence, Italy
-                                            </span>
-                                            <ChevronDown className="h-5 w-5 text-[#7C8493]" />
+
+                                        <div className="relative w-full">
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    setIsOpen((prev) => !prev)
+                                                }
+                                                className="flex w-full items-center justify-between border-b-[1.5px] border-[#D6DDEB] py-2 cursor-pointer text-left"
+                                            >
+                                                <span className="text-[18px] font-medium text-[#25324B]">
+                                                    {selectedLocation}
+                                                </span>
+                                                <ChevronDown
+                                                    className={`h-5 w-5 text-[#7C8493] transition-transform ${isOpen
+                                                            ? "rotate-180"
+                                                            : ""
+                                                        }`}
+                                                />
+                                            </button>
+
+                                            {isOpen && (
+                                                <div className="absolute left-0 top-full z-30 mt-2 w-full min-w-[220px] rounded-md border border-[#D6DDEB] bg-white shadow-lg">
+                                                    <ul className="py-2">
+                                                        {locations.map(
+                                                            (location) => {
+                                                                if (
+                                                                    location ===
+                                                                    selectedLocation
+                                                                )
+                                                                    return null;
+                                                                return (
+                                                                    <li
+                                                                        key={
+                                                                            location
+                                                                        }
+                                                                        onClick={() => {
+                                                                            setSelectedLocation(
+                                                                                location,
+                                                                            );
+                                                                            setIsOpen(
+                                                                                false,
+                                                                            );
+                                                                        }}
+                                                                        className="cursor-pointer px-4 py-2 text-[16px] text-[#25324B] hover:bg-[#F8F8FD]"
+                                                                    >
+                                                                        {
+                                                                            location
+                                                                        }
+                                                                    </li>
+                                                                );
+                                                            },
+                                                        )}
+                                                    </ul>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
-
                                     {/* 4. The "Search my job" Button */}
                                     <button
                                         type="button"
-                                        className="w-full lg:w-auto lg:min-w-[210px] h-full bg-[#4640DE] px-10 py-4 lg:py-0 text-[18px] font-bold text-white transition-all hover:bg-[#3b36c0] active:scale-95"
+                                        className="cursor-pointer w-full lg:w-auto lg:min-w-[210px] h-full bg-[#4640DE] px-10 py-4 lg:py-0 text-[18px] font-bold text-white transition-all hover:bg-[#3b36c0] active:scale-95"
                                     >
                                         Search my job
                                     </button>
@@ -99,13 +159,7 @@ export default function HeroSection() {
                     </div>
 
                     <div className="relative hidden min-h-[720px] lg:flex lg:items-end lg:justify-end">
-                        <div
-                            className="relative z-10 w-full max-w-[480px]"
-                            style={{
-                                clipPath:
-                                    "polygon(0 0, 100% 0, 100% 82%, 63% 100%, 0 100%)",
-                            }}
-                        >
+                        <div className="relative z-10 w-full max-w-[480px] overflow-hidden">
                             <Image
                                 src="/human1.png"
                                 alt="Smiling professional"
@@ -117,7 +171,14 @@ export default function HeroSection() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </Container>
+
+            <div
+                className="absolute bottom-0 right-0 z-20 hidden w-[300px] md:h-[120px] md:w-[200px] lg:h-[250px] lg:w-[430px] overflow-hidden bg-white lg:block"
+                style={{
+                    clipPath: "polygon(100% 0, 100% 100%, 0 100%)",
+                }}
+            />
         </section>
     );
 }

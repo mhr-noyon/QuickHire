@@ -3,10 +3,11 @@ import Container from "@/components/layout/Container";
 import HeroSection from "@/components/home/HeroSection";
 import CompaniesSection from "@/components/home/CompaniesSection";
 import CategorySection from "@/components/home/CategorySection";
-
+import PostJobsSection from "@/components/home/PostJobsSection";
+import FeaturedJobsSection from "@/components/home/FeaturedJobsSection";
 export default function Home() {
     return (
-        <Container>
+        <span>
             <section className="relative overflow-hidden bg-[#F8F8FD]">
                 <div className="pointer-events-none absolute top-0 right-0 z-10">
                     <Image
@@ -24,6 +25,8 @@ export default function Home() {
 
             <CompaniesSection />
             <CategorySection />
-        </Container>
+            <PostJobsSection />
+            <FeaturedJobsSection />
+        </span>
     );
 }

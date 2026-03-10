@@ -16,9 +16,9 @@ const companies = [
 
 export default function CompaniesSection() {
     return (
-        <section className="bg-[#F8F8FD] pb-20 pt-6 z-50"> 
-            <span>
-                <p className="mb-10 text-left text-[18px] font-normal leading-[1.4] text-[#202430]/40">
+        <section className="bg-[#FFFFFF] pb-20 pt-6 z-50">
+            <Container>
+                <p className="mb-10 text-left text-[18px] font-normal leading-[1.4] text-[#202430]/60">
                     Companies we helped grow
                 </p>
 
@@ -26,7 +26,7 @@ export default function CompaniesSection() {
                     {companies.map((company) => (
                         <div
                             key={company.name}
-                            className="flex h-[48px] items-center opacity-40"
+                            className="flex h-[48px] items-center"
                         >
                             <Image
                                 src={company.logo}
@@ -38,7 +38,7 @@ export default function CompaniesSection() {
                         </div>
                     ))}
                 </div>
-            </span>
+            </Container>
         </section>
     );
 }

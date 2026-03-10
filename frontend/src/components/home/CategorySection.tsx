@@ -57,8 +57,8 @@ const categories = [
 
 export default function CategorySection() {
     return (
-        <section className="bg-[#F8F8FD] py-20 lg:py-24">
-            <span>
+        <section className="bg-[#FFFFFF] py-20 lg:py-24">
+            <Container>
                 <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                     <h2
                         className="text-[40px] font-semibold leading-none tracking-[-0.02em] text-[#25324B] md:text-[48px]"
@@ -80,9 +80,11 @@ export default function CategorySection() {
                 <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4">
                     {categories.map((category) => {
                         const Icon = category.icon;
+                        
 
                         return (
                             <Link
+                                key={category.title}
                                 href={`/jobs?category=${encodeURIComponent(category.title)}`}
                                 className="group border border-[#D6DDEB] bg-white p-8 transition hover:border-[#4640DE] hover:bg-[#4640DE]"
                             >
@@ -119,7 +121,7 @@ export default function CategorySection() {
                         );
                     })}
                 </div>
-            </span>
+            </Container>
         </section>
     );
 }
