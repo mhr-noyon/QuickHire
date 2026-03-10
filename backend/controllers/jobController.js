@@ -23,11 +23,11 @@ async function getJobById(id) {
 }
 
 async function createJob(jobData) {
-    const { title, company, location, category, description } = jobData;
+    const { title, company, logo, location, category, description } = jobData;
     try {
         const [result] = await db.query(
-            "INSERT INTO jobs (title, company, location, category, description) VALUES (?, ?, ?, ?, ?)",
-            [title, company, location, category, description],
+            "INSERT INTO jobs (title, company, logo, location, category, description) VALUES (?, ?, ?, ?, ?, ?)",
+            [title, company, logo, location, category, description],
         );
         return { id: result.insertId, ...jobData };
     } catch (err) {
