@@ -268,6 +268,7 @@ Tables are auto-created on server startup. No manual migrations needed.
 ## Key Highlights
 
 - **Auto-setup** — tables and seed data are created on first server start, zero manual SQL needed
+- **No duplicate applications** — backend checks if the same email has already applied for the same job and prevents duplicates
 - **Skeleton loading** — animated placeholder cards while jobs are fetching
 - **Responsive everywhere** — mobile-first design with proper breakpoints for tablet and desktop
 - **Consistent API envelope** — every endpoint returns `{ success, data }` or `{ success, message, errors }`

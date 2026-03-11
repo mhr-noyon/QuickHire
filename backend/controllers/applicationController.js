@@ -18,6 +18,14 @@ async function getAllApplications() {
 async function submitApplication(applicationData) {
     const { job_id, name, email, resume_link, cover_note } = applicationData;
     try {
+        // At first see same email with same job_id exists or not, if exists then throw error
+        const [existing] = await db.query(
+            "SELECT * FROM applications WHERE job_id = ? AND email = ?",
+            [job_id, email],
+        );
+        if (existing.length > 0) {
+            throw new Error("You have already applied for this job with this email.");
+        }
         const [result] = await db.query(
             "INSERT INTO applications (job_id, name, email, resume_link, cover_note) VALUES (?, ?, ?, ?, ?)",
             [job_id, name, email, resume_link, cover_note],
